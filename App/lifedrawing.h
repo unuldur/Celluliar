@@ -3,7 +3,10 @@
 
 #include <QWidget>
 #include <QVector2D>
+#include <QRubberBand>
 #include "TreeUniverse.h"
+#include "drawingmode.h"
+#include "selectionmode.h"
 
 class LifeDrawing : public QWidget
 {
@@ -15,6 +18,7 @@ public:
     void setTreeUnivers(TreeUniverse*);
     void changeMode(Mode mode);
     void setInAction(bool inAction);
+    void selectionUse(SelectionMode::SelectionType type);
 signals:
 
 public slots:
@@ -27,17 +31,15 @@ public slots:
 private:
     bool isPress;
     bool inAction = false;
-    QRect lastRect;
     QPoint offset = QPoint(0, 0);
     QPoint lastPosMouse;
     int sizeRect = 10;
     Mode mode = Mode::BRUSH;
     TreeUniverse* tu;
+    DrawingMode* dm;
 
 
     void drawRect(QPoint point);
-    void setPoint(QPoint point);
-    QPoint TruncOffset();
 };
 
 #endif // LIFEDRAWING_H

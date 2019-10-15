@@ -27,17 +27,24 @@ CONFIG += c++11
 SOURCES += \
         TreeNode.cpp \
         TreeUniverse.cpp \
+        drawmode.cpp \
         lifedrawing.cpp \
         main.cpp \
         mainwindow.cpp \
-        runthread.cpp
+        runthread.cpp \
+        selectionmode.cpp \
+        utils.cpp
 
 HEADERS += \
         TreeNode.h \
         TreeUniverse.h \
+        drawingmode.h \
+        drawmode.h \
         lifedrawing.h \
         mainwindow.h \
-        runthread.h
+        runthread.h \
+        selectionmode.h \
+        utils.h
 
 FORMS += \
         mainwindow.ui

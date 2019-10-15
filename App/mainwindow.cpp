@@ -13,10 +13,19 @@ MainWindow::MainWindow(QWidget *parent) :
     mode->addAction(ui->actionBrush);
     mode->addAction(ui->actionErase);
     mode->addAction(ui->actionRandom);
+    mode->addAction(ui->actionSelection);
     connect(ui->actionBrush, &QAction::triggered, [this](){ui->centralWidget->changeMode(LifeDrawing::Mode::BRUSH);});
     connect(ui->actionErase, &QAction::triggered, [this](){ui->centralWidget->changeMode(LifeDrawing::Mode::ERASED);});
     connect(ui->actionRandom, &QAction::triggered, [this](){ui->centralWidget->changeMode(LifeDrawing::Mode::RANDOM);});
+    connect(ui->actionSelection, &QAction::triggered, [this](){ui->centralWidget->changeMode(LifeDrawing::Mode::SELECTION);});
     connect(ui->actionRun_once, &QAction::triggered, [this](){tu->runStep(); ui->centralWidget->update();});
+
+    connect(ui->actionFill, &QAction::triggered, [this](){
+        ui->centralWidget->selectionUse(SelectionMode::SelectionType::FULL);});
+    connect(ui->actionDelete, &QAction::triggered, [this](){
+        ui->centralWidget->selectionUse(SelectionMode::SelectionType::ERASED);});
+    connect(ui->actionRandomSelect, &QAction::triggered, [this](){
+        ui->centralWidget->selectionUse(SelectionMode::SelectionType::RANDOM);});
 
     RunThread* thread = new RunThread(this, tu);
     connect(ui->actionRun, &QAction::triggered, [this, thread](){
@@ -32,12 +41,23 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->actionRun->setEnabled(true);
         thread->pause();
     });
+    connect(this, &MainWindow::close, [thread](){
+        thread->wakeUp();
+        thread->exit();
+        delete thread;
+    });
     thread->start();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    emit close();
+    event->accept();
 }
 
 
